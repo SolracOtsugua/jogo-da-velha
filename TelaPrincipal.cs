@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace JogoDaVelhaApp
 {
-    public partial class Form1 : Form
+    public partial class TelaPrincipal : Form
     {
         // Variável para controlar de quem é a vez. true = X, false = O.
         private bool _vezDoX = true;
@@ -11,7 +11,7 @@ namespace JogoDaVelhaApp
         // Contador para saber se deu empate (chegou a 9 jogadas e ninguém ganhou)
         private int _jogadas = 0;
 
-        public Form1()
+        public TelaPrincipal()
         {
             InitializeComponent();
         }
@@ -28,13 +28,21 @@ namespace JogoDaVelhaApp
 
             // Se for a vez do X, escreve "X", senão, escreve "O"
             botaoClicado.Text = _vezDoX ? "X" : "O";
+            if (_vezDoX == true) //Condição para trocar as cores do X e do O
+            {
+                botaoClicado.ForeColor = System.Drawing.Color.Tomato; // Cor do X (Vermelho claro)
+            }
+            else
+            {
+                botaoClicado.ForeColor = System.Drawing.Color.CornflowerBlue; // Cor do O (Azul claro)
+            }
             _jogadas++;
             // Verifica se essa jogada fez alguém ganhar
             if (VerificarVencedor())
             {
                 // Mostra a mensagem com o vencedor da rodada
                 string vencedor = _vezDoX ? "X" : "O";
-                MessageBox.Show($"Fim de jogo! O jogador {vencedor} venceu!", "Temos um Vencedor",
+                MessageBox.Show($"Fim de jogo! Jogador {vencedor} venceu!", "Temos um Vencedor",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ZerarTabuleiro(); // Limpa a tela para a próxima partida
             }
@@ -49,7 +57,20 @@ namespace JogoDaVelhaApp
             else
             {
                 _vezDoX = !_vezDoX; // Inverte: se era true vira false, se era false vira true
-                lblVez.Text = $"Vez do Jogador: {(_vezDoX ? "X" : "O")}";
+                //lblVez.Text = $"Vez do Jogador: {(_vezDoX ? "X" : "O")}";
+
+                // 1. Atualiza apenas a letra na nova Label
+                lblJogadorAtual.Text = _vezDoX ? "X" : "O";
+
+                // 2. Muda a cor da letra dependendo de quem é a vez
+                if (_vezDoX == true)
+                {
+                    lblJogadorAtual.ForeColor = System.Drawing.Color.Tomato; // Mesma cor do X no tabuleiro
+                }
+                else
+                {
+                    lblJogadorAtual.ForeColor = System.Drawing.Color.CornflowerBlue; // Mesma cor do O no tabuleiro
+                }
             }
         }
         // Método que checa todas as 8 possibilidades de vitória
@@ -93,7 +114,13 @@ namespace JogoDaVelhaApp
             // Reseta para o jogador X começar de novo e zera a contagem
             _vezDoX = true;
             _jogadas = 0;
-            lblVez.Text = "Vez do Jogador: X";
+
+            //Arrumando os textos
+            lblVez.Text = "Vez do Jogador: ";
+            lblJogadorAtual.Text = "X";
+
+            //Colocando a cor no texto inicial
+            lblJogadorAtual.ForeColor = System.Drawing.Color.Tomato;
         }
     }
 }
